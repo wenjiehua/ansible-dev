@@ -1,0 +1,22 @@
+- name: Using the collections keyword
+  hosts: all
+
+  # multiple collections may be imported
+  collections:
+   - adalovelace.myfirstcollection
+   - buddaldrin.apollo
+
+  tasks:
+    # use role1 from adalovelace.myfirstcollection
+    - import_role:
+        name: role1
+
+    # use a custom module "mymodule" located in namespace buzzaldrin within the collection apollo
+    - name: Use the custom "mymodule" from within the buzzaldrin namespace
+      mymodule:
+        option1: value
+
+    - name: You still need to use FQCN for non-action plugins
+      debug:
+              msg: '{{ lookup("adalovelace.myfirstcollection.lookup1", "param1")| adalovelace.myfirstcollection.filter1 }}'
+

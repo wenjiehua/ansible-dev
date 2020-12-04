@@ -1,0 +1,33 @@
+
+- name: Advanced Playbook Architecture
+  hosts: planetexpress:!farnworth   ## name of group in inventory
+  gather_facts: yes
+
+  pre_tasks: #<-- these run first, followed by handler calls
+  - name: Create a ~/nginx dir
+
+  # by default, ansible looks for the rollpath as...
+  # roles/ in the the relative local directory
+  # /etc/ansible/roles
+  # controlled in ansible.cfg
+  roles:
+          - bootstrap   #<-- this role runs next
+
+  tasks:   #<-- this runs after roles, followed by handlers
+   - name: list 
+     shell: ls 
+     debug:
+           msg: "Example of a task within the tasks section"
+
+
+
+  post_tasks:    #<--- this runs after roles, followed by handlers
+   - name: remove the nginx directory
+     file: 
+        path: "~/nginx"
+        state: directory
+
+   handlers:
+   - name: nginx dir made
+
+

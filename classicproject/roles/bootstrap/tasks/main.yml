@@ -1,0 +1,13 @@
+
+# tasks file for bootstrap
+ # Copy index.html into the service
+  - name: copy index.html
+    copy:
+      src: ~/ans/files/index.html
+      dest: /var/www/html/
+   
+  - name: latest nginx  installed
+    package:
+      name: nginx
+      state: latest
+

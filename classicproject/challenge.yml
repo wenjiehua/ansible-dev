@@ -1,0 +1,38 @@
+
+- name: Nginx Challenges
+  gather_facts: yes
+  hosts: planetexpress
+
+  pre_tasks: #<-- these run first, followed by handler calls
+  - name: Create a ~/nginx dir
+    become: true
+    file:
+    # the var "fileuser" is a host variable
+     path:  nginx
+     state: directory
+    notify: 
+     nginx dir made
+  # by default, ansible looks for the rollpath as...
+  # roles/ in the the relative local directory
+  # /etc/ansible/roles
+  # controlled in ansible.cfg
+  roles:
+   - nginx_roles   #<-- this role runs next
+
+  tasks:   #<-- this runs after roles, followed by handlers
+   - name: list on home dir
+     command: ls
+     register: home_ls
+
+   - name: debug of ls home dir 
+      debug:
+      var: home_ls
+      tags: ls
+      
+  post_tasks:    #<--- this runs after roles, followed by handlers
+   - name: remove the nginx directory
+     become: true
+     file:
+    # the var "fileuser" is a host variable
+      path:  nginx
+      state: absent

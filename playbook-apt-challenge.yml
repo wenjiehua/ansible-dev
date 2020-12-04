@@ -1,0 +1,29 @@
+---
+- name: first challenge play
+  hosts: planetexpress
+  gather_facts: yes # runs by default
+
+  # vars_files expects a list of 1 or more files
+  vars_files:
+    - vars/myvars.yml
+  tasks:
+
+    - name: Install cowsay on CentOS machines
+      yum:
+        name: cowsay
+        state: present
+      become: yes # run as sudo
+      when: ansible_distribution == "CentOS"
+
+    - name: Install cowsay on Ubuntu machines
+      apt:
+        name: cowsay
+        state: present
+      become: yes # run as sudo
+      when: ansible_distribution == "Ubuntu"
+
+    - name: perform shell coomand
+      shell: "{{item}}"
+      become: yes
+      loop: "{{commands}}"
+
